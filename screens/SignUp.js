@@ -1,10 +1,51 @@
 import React from 'react'
+import { useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'react-native'
+// import firebase from '../database/firebase'
+import { collection, addDoc } from "firebase/firestore";
+import db from '../database/firebase'
+
+const SignUp = ({navigation}) => {
+    const [state, setState] = useState({
+        nombre: "",
+        matricula: "",
+        correo: "",
+        carrera: "",
+    });
+
+    const handleChangeText = (name, value) => {
+        setState({ ...state, [name]: value })
+    }
+
+    const addMiembro = async() => {
+
+        try {
+            const docRef = await addDoc(collection(db, "users"), {
+              nombre: state.nombre,
+              matricula: state.matricula,
+              correo: state.correo,
+              carrera: state.carrera
+            });
+            console.log("Document written with ID: ", docRef.id);
+          } catch (e) {
+            console.error("Error adding document: ", e);
+          }
 
 
+        // if(state.nombre === "") {
+        //     alert('Llena los datos correctamente');
+        // } else {
+        //     await firebase.db.collection('miembros').add({
+        //         nombre: state.nombre,
+        //         matricula: state.matricula,
+        //         correo: state.correo,
+        //         carrera: state.carrera
+        //     })
+        //     console.log(state)
+        //     alert('Guardado')
+        // }
+    }
 
-
-    const SignUp = ({navigation}) => {
     return (
         <View style={styles.content}>
             <Image
@@ -17,7 +58,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'reac
                 style={styles.input}
                 placeholder="Ingresa tu nombre completo"
                 keyboardType= { 'default' }
-                // onChangeText= { }
+                onChangeText= {(value) => handleChangeText('nombre', value)}
             />
             
             <Text style={styles.txtInput}>Matricula</Text>
@@ -25,7 +66,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'reac
                 style={styles.input}
                 placeholder="Ingresa tu matricula"
                 keyboardType= { 'number-pad' }
-                // onChangeText= { }
+                onChangeText= {(value) => handleChangeText('matricula', value)}
             />
 
             <Text style={styles.txtInput}>Correo</Text>
@@ -33,7 +74,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'reac
                 style={styles.input}
                 placeholder="Ingresa tu correo"
                 keyboardType= { 'email-address' }
-                // onChangeText= { }
+                onChangeText= {(value) => handleChangeText('correo', value)}
             />
 
             <Text style={styles.txtInput}>Carrera</Text>
@@ -41,7 +82,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'reac
                 style={styles.input}
                 placeholder="Ingresa tu nombre completo"
                 keyboardType= { 'default' }
-                // onChangeText= { }
+                onChangeText= {(value) => handleChangeText('carrera', value)}
             />
 
 
@@ -52,9 +93,10 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'reac
                 style={styles.boton}
                 onPress= { () => {
                     // navigation.navigate('Participants')
-                    post()
+                    addMiembro()
                 } }
-            ><Text style={styles.txtBoton}>Aceptar</Text></TouchableOpacity>
+            ><Text style={styles.txtBoton}>Aceptar</Text>
+            </TouchableOpacity>
 
             <TouchableOpacity
                 style={styles.boton}
