@@ -1,9 +1,13 @@
 import React from 'react'
 import { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'react-native'
-// import firebase from '../database/firebase'
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Button } from 'react-native'
+
+
 import { collection, addDoc } from "firebase/firestore";
 import db from '../database/firebase'
+
+
+
 
 const SignUp = ({navigation}) => {
     const [state, setState] = useState({
@@ -20,31 +24,18 @@ const SignUp = ({navigation}) => {
     const addMiembro = async() => {
 
         try {
-            const docRef = await addDoc(collection(db, "users"), {
-              nombre: state.nombre,
-              matricula: state.matricula,
-              correo: state.correo,
-              carrera: state.carrera
+            const docRef = await addDoc(collection(db, "miembros"), {
+              first: "Alan",
+              middle: "Mathison",
+              last: "Turing",
+              born: 1912
             });
+          
             console.log("Document written with ID: ", docRef.id);
           } catch (e) {
             console.error("Error adding document: ", e);
           }
 
-
-        // if(state.nombre === "") {
-        //     alert('Llena los datos correctamente');
-        // } else {
-        //     await firebase.db.collection('miembros').add({
-        //         nombre: state.nombre,
-        //         matricula: state.matricula,
-        //         correo: state.correo,
-        //         carrera: state.carrera
-        //     })
-        //     console.log(state)
-        //     alert('Guardado')
-        // }
-    }
 
     return (
         <View style={styles.content}>
@@ -97,6 +88,12 @@ const SignUp = ({navigation}) => {
                 } }
             ><Text style={styles.txtBoton}>Aceptar</Text>
             </TouchableOpacity>
+
+            {/* <Button
+                title="Press me"
+                onPress={() => addMiembro()}
+            /> */}
+
 
             <TouchableOpacity
                 style={styles.boton}
@@ -160,3 +157,4 @@ const styles = StyleSheet.create({
         color: "#fff",
       }
 })
+}
